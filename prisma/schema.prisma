@@ -9,3 +9,10 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model artist {
+  id        Int      @id @default(autoincrement())
+  mId       String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
