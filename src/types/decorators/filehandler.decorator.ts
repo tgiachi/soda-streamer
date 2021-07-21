@@ -37,6 +37,11 @@ const newFileHandlers = (extension: string) => {
   return outArray;
 };
 
+const canProcessExtension = (ext: string) => {
+  return registeredFileHandlers[ext] !== undefined;
+};
+
 export const fileHandlerFactory = {
   newFileHandlers,
+  canProcessExtension,
 };

@@ -49,6 +49,7 @@ model track {
   trackOrder  Int
   album       album    @relation(fields: [albumId], references: [id])
   albumId     BigInt
+  md5Hash     String @db.VarChar(50)
   geners      genre[]
 }
 
