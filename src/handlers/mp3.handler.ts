@@ -8,8 +8,7 @@ import util from "util";
 @RegisterFileHandler("mp3")
 export class MP3FileHandler implements IFileHandler {
   async processFile(file: IFileScanResult): Promise<void> {
-    logger.info("File is " + file.name);
     const tags = await mm.parseFile(file.path);
-    console.log(util.inspect(tags, { showHidden: false, depth: null }));
+    logger.info(`${tags.common.title}`);
   }
 }
