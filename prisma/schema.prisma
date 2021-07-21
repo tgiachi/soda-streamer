@@ -11,8 +11,59 @@ generator client {
 }
 
 model artist {
-  id        Int      @id @default(autoincrement())
-  mId       String   @db.VarChar(50)
+  id        BigInt   @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  mId       String   @db.VarChar(100)
+  coverUrl  String   @db.VarChar(200)
+  name      String   @db.VarChar(200)
+  albums    album[]
+}
+
+model album {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  mId       String   @db.VarChar(100)
+  coverUrl  String   @db.VarChar(200)
+  name      String   @db.VarChar(200)
+  year      Int
+  artist    artist   @relation(fields: [artistId], references: [id])
+  artistId  BigInt
+  tracks    track[]
+}
+
+model track {
+  id          BigInt   @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  mId         String   @db.VarChar(100)
+  artistName  String   @db.VarChar(200)
+  bitRate     String   @db.VarChar(10)
+  fileSize    BigInt
+  fileName    String   @db.VarChar(300)
+  playCount   Int
+  globalCount BigInt
+  trackLength BigInt
+  trackName   String   @db.VarChar(200)
+  trackOrder  Int
+  album       album    @relation(fields: [albumId], references: [id])
+  albumId     BigInt
+  geners      genre[]
+}
+
+model genre {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(100)
+  tracks    track[]
+}
+
+model directory_watch {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  directory String   @db.VarChar(255)
+  isEnabled Boolean  @default(true)
 }
