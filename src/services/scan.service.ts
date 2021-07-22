@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import md5File from "md5-file";
 import { fileHandlerFactory } from "../types/decorators/filehandler.decorator";
 import { TrackDao } from "../dao/track.dao";
+import { Queue } from "queue-typescript";
 
 export interface IFileScanResult {
   path: string;
@@ -26,6 +27,7 @@ export class ScanService {
 
   logger: pino.Logger = buildLogger("service:scanservice");
   trackDao: TrackDao = new TrackDao();
+  queueChunk: number = 5;
 
   public async scanDirectory(path = "./"): Promise<IFileScanResult[]> {
     if (!path.endsWith("/")) path = `${path}/`;
@@ -52,7 +54,14 @@ export class ScanService {
   }
 
   public async processFiles(files: IFileScanResult[]) {
-    await Promise.all(files.map((f) => this.processFile(f)));
+    while (files.length > 0) {
+      let chunk: IFileScanResult[] = [];
+      for (let i = 0; i < this.queueChunk; i++) {
+        chunk = files.splice(0, 1);
+      }
+      this.logger.info(`Chunk of ${this.queueChunk} remaining ${files.length}`);
+      await Promise.all(chunk.map((f) => this.processFile(f)));
+    }
   }
 
   public async processFile(file: IFileScanResult) {

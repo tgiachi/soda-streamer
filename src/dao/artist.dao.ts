@@ -17,4 +17,9 @@ export class ArtistDao {
   public async all(): Promise<prismaPkg.artist[]> {
     return await this.client.artist.findMany();
   }
+
+  public async insert(artist: prismaPkg.artist) {
+    const result = await this.client.artist.create({ data: artist });
+    this.logger.info(`result: ${result.id}`);
+  }
 }

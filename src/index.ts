@@ -17,9 +17,10 @@ server.listen(8000, (err, address) => {
     process.exit(1);
   }
   logger.info(`Server listening 🚀  at ${address}`);
-
+  const path = "\\\\192.168.0.201\\MP3";
   ScanService.getInstance()
-    .scanDirectory("/Users/squid/mp3")
+
+    .scanDirectory(path)
     .then((files) => {
       ScanService.getInstance().processFiles(files);
     });
